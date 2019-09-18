@@ -1,153 +1,104 @@
-set nocompatible              " be iMproved, required
-filetype off                  " required
+" Pathogen
+execute pathogen#infect()
+syntax on
+filetype plugin indent on
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
+" Solarized Theme
+set background=dark
+colorscheme solarized
 
-" let Vundle manage Vundle, required
-Plugin 'gmarik/Vundle.vim'
+" Map Spacebar as Leader key
+map <Space> <Leader>
 
-" Git
-Plugin 'tpope/vim-fugitive'
+" `gf` opens file under cursor in a new vertical split
+nnoremap gf :vertical wincmd f<CR>
 
-" File Browser
-Plugin 'scrooloose/nerdtree'
-Plugin 'jistr/vim-nerdtree-tabs'
+" Plugins are declared here c/o vim-plug.
+call plug#begin('~/.vim/plugged')
 
-" Quoting/Parenthesizing
-Plugin 'tpope/vim-surround'
+Plug 'mileszs/ack.vim'
+Plug 'kien/ctrlp.vim'
+Plug 'scrooloose/nerdcommenter'
+Plug 'scrooloose/nerdtree'
+Plug 'bbatsov/rubocop'
+Plug 'godlygeek/tabular'
+Plug 'jgdavey/tslime.vim'
+Plug 'vim-airline/vim-airline'
+Plug 'jeetsukumaran/vim-buffergator'
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-rails'
+"Plug 'vim-ruby/vim-ruby'
+Plug 'tpope/vim-surround'
+Plug 'janko-m/vim-test'
+Plug 'suan/vim-instant-markdown', {'for': 'markdown'}
 
-" Syntax Checking
-Plugin 'scrooloose/syntastic'
+call plug#end()
 
-" Fuzzy file search
-Plugin 'kien/ctrlp.vim'
+" Ack.vim
+" Use the_silver_searcher to power search
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep'
+endif
+" Do no open the first Ack file match automatically
+cnoreabbrev Ack Ack!
 
-" Color scheme
-Plugin 'altercation/vim-colors-solarized'
+" | CTRLP |
+let g:ctrlp_map = '<Leader><Space>'
+let g:ctrlp_working_path_mode = '0'
 
-" Commenting
-Plugin 'scrooloose/nerdcommenter'
+" nerdtree
+autocmd StdinReadPre * let s:std_in=1
 
-" Ack/Ag text searches
-Plugin 'mileszs/ack.vim'
+" Map NerdTree shortcut
+map <Leader>n :NERDTreeToggle<CR>
 
-" Language specific plugins
-Plugin 'kchmck/vim-coffee-script'
-Plugin 'vim-ruby/vim-ruby'
-Plugin 'tpope/vim-rails'
-Plugin 'tpope/vim-rbenv'
-
-Plugin 'slim-template/vim-slim'
-Plugin 'suan/vim-instant-markdown'
-
-" Recently edited files
-Plugin 'buffergator'
-
-" Whitespace Detection
-Plugin 'ntpeters/vim-better-whitespace'
-
-Plugin 'git@github.com:jgdavey/tslime.vim.git'
-
-" tmux integration
-Plugin 'benmills/vimux'
-
-" tmux rspec integration
-Plugin 'skalnik/vim-vroom'
-
-Plugin 'jgdavey/vim-turbux'
-
-" es6 syntax highlighting
-Plugin 'isRuslan/vim-es6'
-
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
-" To ignore plugin indent changes, instead use:
-"filetype plugin on
-"
-" Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-"
-" see :h vundle for more details or wiki for FAQ
-" Put your non-Plugin stuff after this line
-
-" Syntastic Settings
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_ruby_exec = '~/.rbenv/shims/ruby'
-let g:syntastic_ruby_mri_exec = '~/.rbenv/shims/ruby'
-
-" ctrlp Settings
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip 
-let g:ctrlp_custom_ignore = {
-			\ 'dir':  '\v[\/]\.(git|hg|svn)|(tmp|log|vendor|test_artifacts|vendor|results|bin)$',
-			\ 'file': '\v\.(exe|so|dll|xls|xlsx|pdf|jpg|png|log)$'
-			\ }
-
-" Map to Leader + N
-map <Leader>n <plug>NERDTreeTabsToggle<CR>
-let g:nerdtree_tabs_open_on_gui_startup = 1
 " Go to current file
 nmap ,n :NERDTreeFind<CR>
+let g:NERDTreeChDirMode = 2
 
-" Solarized color settings
-syntax enable
-colorscheme solarized
-set background=dark
-"set background=light
+" vim-test
+  " these "Ctrl mappings" work well when Caps Lock is mapped to Ctrl
+nmap <silent> t<C-n> :TestNearest<CR>
+nmap <silent> t<C-f> :TestFile<CR>
+nmap <silent> t<C-s> :TestSuite<CR>
+nmap <silent> t<C-l> :TestLast<CR>
+nmap <silent> t<C-g> :TestVisit<CR>
 
-colorscheme solarized
+" make test commands execute using dispatch.vim
+let test#strategy = "tslime"
+let g:test#preserve_screen = 1
+let test#ruby#rspec#executable = 'bin/rails test'
 
-" Display line numbers
+" Tslime
+let g:tslime_always_current_session = 1
+let g:tslime_always_current_window = 1
+
+" vim-ruby
+"let ruby_fold = 0
+"let ruby_space_errors = 0
+"let ruby_foldable_groups = 'def case'
+"let ruby_fold_lines_limit = 200
+
+" Globals
 set number
+set wildignore+=*/tmp/*,*.cache
 
-" Display column line guide
-set colorcolumn=120
+" ctrl + j OR ctrl + k to move a line down or up respectively.
+nnoremap <C-j> :m .+1<CR>==
+nnoremap <C-k> :m .-2<CR>==
+inoremap <C-j> <Esc>:m .+1<CR>==gi
+inoremap <C-k> <Esc>:m .-2<CR>==gi
+vnoremap <C-j> :m '>+1<CR>gv=gv
+vnoremap <C-k> :m '<-2<CR>gv=gv
+set tabstop=2 softtabstop=0 expandtab shiftwidth=2 smarttab
 
-" Fix path
-set shell=/bin/bash
-
-" Code Folding
-set foldmethod=syntax
-set foldlevelstart=20
-set foldnestmax=5
-
-" Sourced from vim tip: http://vim.wikia.com/wiki/Keep_folds_closed_while_inserting_text
-autocmd InsertEnter * if !exists('w:last_fdm') | let w:last_fdm=&foldmethod | setlocal foldmethod=manual | endif
-autocmd InsertLeave,WinLeave * if exists('w:last_fdm') | let &l:foldmethod=w:last_fdm | unlet w:last_fdm | endif
-
-" Soft tabs
-set tabstop=2
-set shiftwidth=2
-set expandtab
-
-" Enable backspace
-set backspace=2
-
-" Ack using Silversearcher
-let g:ackprg = 'ag --nogroup --nocolor --column'
-
-" Turbux Test runner
-let g:turbux_command_prefix = 'spring'
-
-" Stamp mode
-nnoremap S "_diwP
-Bundle 'wakatime/vim-wakatime'
-
-" Additional file type mappings
-if has("syntax")
-  au BufNewFile,BufRead *.ngslim set filetype=slim
-endif
+"Uncomment to override defaults:
+let g:instant_markdown_slow = 1
+"let g:instant_markdown_autostart = 0
+"let g:instant_markdown_open_to_the_world = 1
+"let g:instant_markdown_allow_unsafe_content = 1
+let g:instant_markdown_allow_external_content = 1
+"let g:instant_markdown_mathjax = 1
+"let g:instant_markdown_logfile = '/tmp/instant_markdown.log'
+"let g:instant_markdown_autoscroll = 0
