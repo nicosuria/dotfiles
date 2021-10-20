@@ -1,5 +1,6 @@
 " Pathogen
 execute pathogen#infect()
+set t_Co=256
 syntax on
 filetype plugin indent on
 
@@ -17,7 +18,6 @@ nnoremap gf :vertical wincmd f<CR>
 " Plugins are declared here c/o vim-plug.
 call plug#begin('~/.vim/plugged')
 
-Plug 'morhetz/gruvbox'
 Plug 'mileszs/ack.vim'
 Plug 'kien/ctrlp.vim'
 Plug 'scrooloose/nerdcommenter'
@@ -40,6 +40,7 @@ Plug 'jparise/vim-graphql'
 Plug 'elzr/vim-json'
 Plug 'leafgarland/typescript-vim'
 Plug 'peitalin/vim-jsx-typescript'
+Plug 'morhetz/gruvbox'
 
 call plug#end()
 
